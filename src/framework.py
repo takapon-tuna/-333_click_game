@@ -18,7 +18,7 @@ class GameView(tk.Tk):
         super().__init__()
         self.controller = controller  # コントローラーの参照を保持
         self.title("クリッカーゲーム")  # ウィンドウのタイトル
-        self.geometry("400x200")  # ウィンドウのサイズ
+        self.geometry("640x360")  # ウィンドウのサイズ
         self.create_widgets()  # ウィジェットの作成
 
     def create_widgets(self):
