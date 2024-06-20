@@ -1,29 +1,61 @@
-import tkinter as tk
+import tkinter as tk  # tkinterモジュールをインポート
+
+# ゲームのモデルクラス
 
 
-class ClickerGame(tk.Tk):
+class GameModel:
     def __init__(self):
-        super().__init__()
-        self.title("クリッカーゲーム")
-        self.geometry("400x200")  # ウィンドウのサイズを400x200に設定
-        self.score = 0
-        self.score_label = tk.Label(
-            self, text=f"スコア: {self.score}", font=('Helvetica', 14))
-        self.score_label.pack(pady=20)
-
-        self.click_button = tk.Button(
-            self, text="クリック！", command=self.increment_score, font=('Helvetica', 14))
-        self.click_button.pack(pady=20)
+        self.score = 0  # スコアの初期値
+        self.click_point = 1  # クリックごとのスコア増加量
 
     def increment_score(self):
-        self.score += 1
-        self.score_label.config(text=f"スコア: {self.score}")
+        self.score += self.click_point  # スコアを増加させるメソッド
 
 
+# ゲームのビュークラス（tkinterのTkクラスを継承）
+class GameView(tk.Tk):
+    def __init__(self, controller):
+        super().__init__()
+        self.controller = controller  # コントローラーの参照を保持
+        self.title("クリッカーゲーム")  # ウィンドウのタイトル
+        self.geometry("400x200")  # ウィンドウのサイズ
+        self.create_widgets()  # ウィジェットの作成
+
+    def create_widgets(self):
+        # スコア表示用のラベル
+        self.score_label = tk.Label(
+            self, text=f"スコア: {self.controller.model.score}", font=('Helvetica', 14))
+        self.score_label.pack(pady=20)  # ラベルをウィンドウに配置
+
+        # クリックボタン
+        self.click_button = tk.Button(self, text="クリック！", command=self.controller.increment_score, font=(
+            'Helvetica', 14), bg='blue', fg='white')
+        self.click_button.pack(pady=20)  # ボタンをウィンドウに配置
+
+    def update_score(self):
+        self.score_label.config(
+            text=f"スコア: {self.controller.model.score}")  # スコアラベルを更新
+
+
+# ゲームのコントローラークラス
+class GameController:
+    def __init__(self, model, view):
+        self.model = model  # モデルの参照を保持
+        self.view = view  # ビューの参照を保持
+
+    def increment_score(self):
+        self.model.increment_score()  # モデルのスコアを増加
+        self.view.update_score()  # ビューのスコア表示を更新
+
+
+# メイン関数
 def main():
-    app = ClickerGame()
-    app.mainloop()
+    model = GameModel()  # モデルオブジェクトの作成
+    controller = GameController(model, GameView(
+        controller=None))  # コントローラーオブジェクトの作成
+    controller.view.controller = controller  # 循環参照を設定
+    controller.view.mainloop()  # イベントループの開始
 
 
 if __name__ == "__main__":
-    main()
+    main()  # メイン関数の呼び出し
