@@ -24,12 +24,12 @@ class GameView(tk.Tk):
     def create_widgets(self):
         # スコア表示用のラベル
         self.score_label = tk.Label(
-            self, text=f"スコア: {self.controller.model.score}", font=('Helvetica', 14))
+            self, text=f"スコア: {self.controller.model.score}", font=('Helvetica', 16))
         self.score_label.pack(pady=20)  # ラベルをウィンドウに配置
 
         # クリックボタン
         self.click_button = tk.Button(self, text="クリック！", command=self.controller.increment_score, font=(
-            'Helvetica', 14), bg='blue', fg='white')
+            'Helvetica', 20), bg='blue', fg='white')
         self.click_button.pack(pady=20)  # ボタンをウィンドウに配置
 
     def update_score(self):
@@ -48,13 +48,12 @@ class GameController:
         self.view.update_score()  # ビューのスコア表示を更新
 
 
-# メイン関数
 def main():
     model = GameModel()  # モデルオブジェクトの作成
-    controller = GameController(model, GameView(
-        controller=None))  # コントローラーオブジェクトの作成
-    controller.view.controller = controller  # 循環参照を設定
-    controller.view.mainloop()  # イベントループの開始
+    controller = GameController(model, None)  # 一時的にviewをNoneで初期化
+    view = GameView(controller=controller)  # GameViewにcontrollerを設定
+    controller.view = view  # GameControllerにviewを設定
+    view.mainloop()  # イベントループの開始
 
 
 if __name__ == "__main__":
