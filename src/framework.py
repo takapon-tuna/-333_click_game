@@ -5,6 +5,7 @@ class ClickerGame(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("クリッカーゲーム")
+        self.geometry("400x200")  # ウィンドウのサイズを400x200に設定
         self.score = 0
         self.score_label = tk.Label(
             self, text=f"スコア: {self.score}", font=('Helvetica', 14))
